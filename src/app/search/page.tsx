@@ -23,13 +23,12 @@ const Search = (): JSX.Element => {
           <BasicSearch rfkId="rfkid_6" />
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="m-auto pt-10 min-h-screen bg-gray-50">
-          {totalItems > 0 &&
+      <div className="m-auto pt-10 min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {query != '' &&
             <div className="mb-6">
               <p className="text-gray-800 text-lg w-full text-left">Showing results for <strong className="text-blue-700 text-700">{`"${query}"`}</strong></p>
-            </div>
-          }
+            </div>}
           <QuestionsAnswers
             key={`${query}-questions`}
             rfkId="rfkid_qa"

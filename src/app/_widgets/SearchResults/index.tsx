@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ArticleItemCard from '@/app/_widgets/components/ArticleCard';
 import ArticleHorizontalItemCard from '@/app/_widgets/components/ArticleHorizontalCard';
@@ -37,6 +37,7 @@ type ArticleSearchResultsProps = {
   defaultPage?: SearchResultsStoreState['page'];
   defaultItemsPerPage?: SearchResultsStoreState['itemsPerPage'];
   defaultKeyphrase?: SearchResultsStoreState['keyphrase'];
+  onTotalItemsChange?: (total: number) => void;
 };
 type InitialState = SearchResultsInitialState<'itemsPerPage' | 'keyphrase' | 'page' | 'sortType'>;
 
@@ -45,6 +46,7 @@ export const SearchResultsComponent = ({
   defaultPage = 1,
   defaultKeyphrase = '',
   defaultItemsPerPage = 10,
+  onTotalItemsChange
 }: ArticleSearchResultsProps) => {
   const {
     actions: { onItemClick },
@@ -68,14 +70,22 @@ export const SearchResultsComponent = ({
     },
     query: (query): any => {
       query
-        if (SEARCH_CONFIG.source !== '') {
-          const sources = SEARCH_CONFIG.source.split('|');
-          sources.forEach(source => {
-              query.getRequest().addSource(source.trim());
-          });
-        }
+      if (SEARCH_CONFIG.source !== '') {
+        const sources = SEARCH_CONFIG.source.split('|');
+        sources.forEach(source => {
+          query.getRequest().addSource(source.trim());
+        });
+      }
     },
   });
+
+
+  useEffect(() => {
+    if (onTotalItemsChange) {
+      onTotalItemsChange(totalItems);
+    }
+  }, [onTotalItemsChange, totalItems]);
+
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const defaultCardView = 'list';
   const [dir, setDir] = useState(defaultCardView);
@@ -90,7 +100,7 @@ export const SearchResultsComponent = ({
   }
   return (
     <div>
-      <div className="flex relative max-w-full px-4 text-black dark:text-gray-100 text-opacity-75">
+      <div className="flex relative max-w-full px-4 text-black dark:text-gray-100 text-opacity-75 mb-24">
         {isFetching && (
           <div className="w-full h-full fixed top-0 left-0 bottom-0 right-0 z-30 bg-white dark:bg-gray-800 opacity-50">
             <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] flex flex-col justify-center items-center z-40">
@@ -155,11 +165,11 @@ export const SearchResultsComponent = ({
             </section>
           </React.Fragment>
         )}
-        {totalItems <= 0 && !isFetching && (
+        {/* {totalItems <= 0 && !isFetching && (
           <div className="w-full flex justify-center">
             <h3>0 Results</h3>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

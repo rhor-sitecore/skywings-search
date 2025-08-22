@@ -8,9 +8,9 @@ import withPageTracking from '@/app/_hocs/withPageTracking';
 import ArticleDetailWidget from '@/app/_widgets/ArticleDetail';
 
 const ArticleDetail = (): JSX.Element => {
-  const params = useParams<{ slug: string;  }>()
+  const params = useParams<{ slug: string; }>()
 
-  return <ArticleDetailWidget key={params?.slug} id={params?.slug} rfkId="rfkid_7" />;
+  return <ArticleDetailWidget key={params?.slug} id={params?.slug} rfkId="skywings_search_results" />;
 };
 
 export default withPageTracking(ArticleDetail, PAGE_EVENTS_PDP);
